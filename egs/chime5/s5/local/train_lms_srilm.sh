@@ -87,7 +87,7 @@ fi
 
 
 # Extract the word list from the training dictionary; exclude special symbols
-sort $words_file | awk '{print $1}' | grep -v '\#0' | grep -v '<eps>' | grep -v -F "$oov_symbol" > $tgtdir/vocab
+sort $words_file | awk '{print $1}' | grep -a -v '\#0' | grep -a -v '<eps>' | grep -a -v -F "$oov_symbol" > $tgtdir/vocab
 if (($?)); then
   echo "Failed to create vocab from $words_file"
   exit 1
@@ -99,7 +99,7 @@ fi
 # Kaldi transcript files contain Utterance_ID as the first word; remove it
 # We also have to avoid skewing the LM by incorporating  the same sentences
 # from different channels
-sed -e "s/\.CH.//" -e "s/_.\-./_/" $train_text | sort -u | \
+sed -e "s/\.CH.//" -e "s/_.\-./_/" -e "s/NOLOCATION\(\.[LR]\)*-//" -e "s/U[0-9][0-9]_//" $train_text | sort -u | \
   perl -ane 'print join(" ", @F[1..$#F]) . "\n" if @F > 1' > $tgtdir/train.txt
 if (($?)); then
     echo "Failed to create $tgtdir/train.txt from $train_text"
