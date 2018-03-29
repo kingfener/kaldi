@@ -87,7 +87,7 @@ fi
 
 
 # Extract the word list from the training dictionary; exclude special symbols
-sort $words_file | awk '{print $1}' | grep -v '\#0' | grep -v '<eps>' | grep -v -F "$oov_symbol" > $tgtdir/vocab
+sort $words_file | awk '{print $1}' | grep -a -v '\#0' | grep -a -v '<eps>' | grep -a -v -F "$oov_symbol" > $tgtdir/vocab
 if (($?)); then
   echo "Failed to create vocab from $words_file"
   exit 1
